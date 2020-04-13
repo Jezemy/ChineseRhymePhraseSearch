@@ -1,0 +1,83 @@
+body {
+	font-family: "微软雅黑";
+	background: url("../images/bg.png") repeat;
+	background-attachment:fixed;
+	background-color: #000000;
+
+
+}
+
+img {
+	border: 0px;
+}
+
+body a {
+	color: #666;
+}
+
+a:hover {
+	color: #666;
+}
+
+#logo,
+#post,
+#videoUrl,
+#notice,
+#show,
+#footer {
+	margin-left: auto;
+	margin-right: auto;
+
+}
+
+#logo {
+	display: table;
+	margin-top: 70px;
+}
+
+#post {
+	margin-top: 50px;
+	margin-bottom: 20px;
+}
+
+#videoUrl {
+	margin-top: 20px;
+
+}
+
+#footer {
+	text-align: center;
+
+}
+
+#show {
+	margin-top: 20px;
+	word-wrap: break-word;
+	word-break: normal;
+}
+
+#ad {
+
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.panel-body span {
+	margin-top: 10px;
+}
+
+.list-group button {
+
+	margin: 10px;
+}
+
+#result {
+	padding: 10px 10px;
+	text-align: center;
+}
+
+
+.option-group {
+	text-align: center;
+}
+

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>疯狂押韵 - 有一天你也能Freestyle</title>
+    <link rel="shortcut icon" href="/static/icon/rhyme.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/static/index/css/base.css">
+    <script src="/static/index/js/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <link href="/static/index/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .btn-default-alt {
+            color: #4ea8f5;
+            background-color: rgba(255, 255, 255, 0);
+            border-color: #4ea8f5;
+            border-width: 1px;
+            border-style: solid;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: 400;
+            transition: all 0.3s linear;
+        }
+
+        .btn-default-alt:hover {
+            border-color: #4ea8f5;
+            background-color: #4ea8f5;
+            color: #fff;
+        }
+
+        .btn-primary-alt {
+            background-color: rgba(255, 255, 255, 0);
+            border-width: 1px;
+            border-style: solid;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            font-weight: 400;
+            border-color: #4ea8f5;
+            background-color: #4ea8f5;
+            color: #fff;
+
+        }
+
+        .btn-primary-alt :hover {
+        }
+
+        .btn-success {
+            color: #fff;
+            background-color: #15c550;
+            border-color: #15c550
+        }
+
+        .btn-success.active, .btn-success.focus, .btn-success:active, .btn-success:focus, .btn-success:hover, .open > .dropdown-toggle.btn-success {
+            color: #fff;
+            background-color: #08b451;
+            border-color: #08b451
+        }
+
+        .list-group .active {
+            background-color: #4ea8f5;
+        }
+
+        .list-group .active:hover {
+            background-color: #40a0f0;
+        }
+
+        #page {
+            padding: 10px 10px;
+            text-align: center;
+        }
+
+        #page a, strong {
+            margin: 10px 5px;
+        }
+
+        ul.pagination li {
+            display: inline;
+        }
+
+        ul.pagination li a, strong {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+
+        ul.pagination li a.active {
+            background-color: #40a0f0;
+            color: white;
+            border-radius: 5px;
+        }
+
+
+
+        ul.pagination li a:hover:not(.active) {
+            background-color: #ddd;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        var rhymeIndex = 1;
+        var toneIndex = 0;
+        var pageNum = 1;
+
+        $(function () {
+            var init = ["欢迎", "使用", "押韵工具", "你可以", "在上方的", "输入框中", "输入", "你想要", "押韵的", "词组", "点击", "开始押韵", "即可查看", "与其", "押韵的", "其他词组"];
+            showRhyme(init);
+        });
+
+        function check(tag) {
+            var options = $('.rhyme button');
+            for (i = 0; i < options.length; i++) {
+                $(options[i]).removeClass('btn-primary-alt');
+            }
+
+            $(tag).addClass('btn-primary-alt');
+            rhymeIndex = $(tag).attr('index');
+        }
+
+        function tone(tag) {
+            var options = $('.tone button');
+            for (i = 0; i < options.length; i++) {
+                $(options[i]).removeClass('btn-primary-alt');
+            }
+            $(tag).addClass('btn-primary-alt');
+            toneIndex = $(tag).attr('index');
+        }
+
+        function jump(tag) {
+            var wd = $(tag).text();
+            window.open("https://www.baidu.com/s?wd=" + wd);
+        }
+
+        function submit() {
+            if (exempify()) {
+                return;
+            }
+            getData(1);
+
+
+        }
+
+        function getData(pnum) {
+            var phrase = $('#rhymeurl').val();
+            $.post('/getRhyme/' + pnum + '/', {
+                "phrase": phrase,
+                "rhymeOption": rhymeIndex,
+                "toneOption": toneIndex,
+                csrfmiddlewaretoken: '{{ csrf_token  }}'
+            }, function (data) {
+
+
+                if (data["code"] === "200") {
+                    if (data["result"].length === 0) {
+                        var wrong = ['不好', '意思', '我', '居然', '没', '库存', '....'];
+                        showRhyme(wrong);
+                        return;
+                    }
+                    showRhyme(data['result']);
+                    pageNum = data['pagesNum'];
+                    if (pageNum != 1) {
+                        $('#page').css("display", "block");
+                    } else {
+                        $('#page').css("display", "none");
+                    }
+                    paginator(data['totals'], data['pagesNum'], data['curpage']);
+
+                } else {
+                    var wrong = ['韵脚', '获取', '居然', '失败', '了', '....'];
+                    showRhyme(wrong);
+
+                }
+
+            })
+        }
+
+        function exempify() {
+            var word = $('#rhymeurl').val();
+            regex1 = /[\u4e00-\u9fa5]*/;
+            regex2 = /\[.*\]|[“”，。、；’【】（）？》《！\s():/><,.;+\-*]/;
+            regex3 = /[0-9A-Za-z]]*/;
+            if (!regex1.test(word) || regex2.test(word) || regex3.test(word)) {
+                var regexWrong = ['请', '不要', '输入', '其他', '非中文的', '字符', '哦', '....'];
+                showRhyme(regexWrong);
+                return true;
+            }
+
+// 				var correct = ['输入','成功','请','稍等','一小会','正在','努力','加载中','....'];
+// 				showRhyme(correct);
+            return false;
+
+        }
+
+        function showRhyme(array) {
+            var result = $('#result');
+            result.empty();
+            $.each(array, function (key, val) {
+                str = '<button type="button" class="btn btn-success " onclick = "jump(this)">' + val + '</button>';
+                result.append(str);
+            });
+
+        }
+
+        function paginator(datanum, pagesnum, curpage) {
+            var pagination = $('#page ul');
+            pagination.empty();
+
+            if (curpage > 1) {
+                pagination.append('<li><a href="javascript:void(0);" onclick="cpage(this)" index = ' + (curpage - 1) + '>上一页</a></li>');
+            }
+
+            startpage = curpage - 5;
+            if (startpage < 1) {
+                startpage = 1;
+            } else {
+                pagination.append('<li><a href="javascript:void(0);">...</a></li>');
+            }
+            endpage = curpage + 5;
+            if (endpage > pagesnum) {
+                endpage = pagesnum;
+            }
+
+            for (var i = startpage; i <= endpage; i++) {
+                if (i == curpage) {
+                    pagination.append('<li><a class="active" onclick="javascript:void(0);" >' + i + '</a></li>');
+                } else {
+                    pagination.append('<li><a href="javascript:void(0);" onclick="cpage(this)" index= ' + i + '>' + i + '</a></li>');
+                }
+
+            }
+
+            if (endpage < pagesnum) {
+                pagination.append('<li><a onclick="javascript:void(0);">...</a></li>');
+            }
+            if (curpage < pagesnum) {
+                pagination.append('<li><a href="javascript:void(0);" type="button" class="btn-default" onclick="cpage(this)" index= ' + (curpage + 1) + '>下一页</a></li>');
+            }
+            pagination.append('<strong>共' + datanum + '条</strong>');
+
+        }
+
+        function cpage(tag) {
+            var index = $(tag).attr('index');
+            getData(index);
+        }
+
+    </script>
+
+<body>
+<div class="container">
+
+    <div id="logo" class="row">
+        <div class="col-xs-12">
+            <a href="/rhyme/"><img src="/static/index/images/rhyme.png" alt="押韵工具"></a>
+        </div>
+    </div>
+
+    <div id="post" class="row">
+        <div class="col-xs-12">
+            <div class="input-group">
+                <input name="rhymeurl" id="rhymeurl" type="text" class="form-control input-lg"
+                       placeholder="输入你想要押韵的词, 如: 人气">
+                <span class="input-group-btn">
+							<button id="input-submit" class="btn-primary-alt input-lg " type="button"
+                                    onclick="submit()">开始押韵</button>
+						</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="show" class="row">
+        <div class="col-xs-12 option-group rhyme">
+            <label>
+                <button type="button" class="btn-default-alt btn-lg  btn-primary-alt" onclick="check(this)" index="1">
+                    单押
+                </button>
+            </label>
+            <label>
+                <button type="button" class="btn-default-alt btn-lg" onclick="check(this)" index="2">双押</button>
+            </label>
+            <label>
+                <button type="button" class="btn-default-alt btn-lg" onclick="check(this)" index="3">三押</button>
+            </label>
+            <label>
+                <button type="button" class="btn-default-alt btn-lg" onclick="check(this)" index="4">多押</button>
+            </label>
+        </div>
+
+    </div>
+
+    <div id="tone" class="row">
+        <div class="col-xs-12 option-group tone">
+            <label>
+                <button type="button" class="btn-default-alt btn-lg btn-primary-alt" onclick="tone(this)" index="0">
+                    声调不限
+                </button>
+            </label>
+            <label>
+                <button type="button" class="btn-default-alt btn-lg" onclick="tone(this)" index="1">单尾调</button>
+            </label>
+            <label>
+                <button type="button" class="btn-default-alt btn-lg" onclick="tone(this)" index="2">双尾调</button>
+            </label>
+        </div>
+
+    </div>
+
+    <div id="show" class="row">
+        <div class="col-xs-12">
+            <div class="list-group">
+                <a href="#" class="list-group-item active">
+                    韵脚结果
+                </a>
+                <div id="result">
+
+                </div>
+                <div id="page">
+                    <ul class="pagination">
+
+                    </ul>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>
