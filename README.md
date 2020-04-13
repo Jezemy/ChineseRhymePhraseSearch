@@ -26,6 +26,7 @@
 - 数据比较杂乱，大多数词可能不会用得到，也有部分词比较冗余
 - 由于是旧项目，重新启用后发现查询速度比较慢，暂不清楚是什么原因，与原始版本查询速度相比差距较大。想体验原来的速度可以进在线网站进行查看
 - 后台记录好像出现一些未捕获的异常，不过还好不影响使用。
+- 随着不断得更新押韵表，发现有些情况未考虑到，待修复
 
 # 运行环境需求
 - Python3
@@ -71,5 +72,3 @@ python manage.py runserver
 ![数据库表图](https://github.com/Jezemy/ChineseRhymePhraseSearch/blob/master/pic/tables.png?raw=true)
 
 ![预览图1](https://github.com/Jezemy/ChineseRhymePhraseSearch/blob/master/pic/display1.png?raw=true)
-
-![预览图2](https://github.com/Jezemy/ChineseRhymePhraseSearch/blob/master/pic/display2.png?raw=true)
