@@ -1,7 +1,7 @@
 # RhymeSearch 疯狂押韵
 ![RhymeSearch](https://github.com/Jezemy/ChineseRhymePhraseSearch/blob/master/pic/rhymeSearch.png?raw=true)
 
-在线预览网站：[疯狂押韵 - 有一天你也能Freestyle]("http://www.jezemy.cn/rhyme/")
+在线预览网站：[疯狂押韵 - 有一天你也能Freestyle](http://www.jezemy.cn/rhyme/)
 注：网站可能在2020年9月失效，不一定会续期，若过期可以下载源码进行编译
 
 
@@ -13,7 +13,7 @@
 
 因此结合自身的写词经历，将押韵规则做一些更细的划分，使得匹配结果更好些。
 
-详细可以查看我的[中文押韵对应表](https://github.com/Jezemy/ChineseRhymeRules")
+详细可以查看我的[中文押韵对应表](https://github.com/Jezemy/ChineseRhymeRules)
 
 # 功能简单说明
 -  可以根据输入的短语搜索到与其押韵的其他词语
