@@ -41,7 +41,7 @@ django3.0 版本需要:
 # 安装说明
 ### 1. 配置数据库
 首先需要在RhymeSearch\setting.py内设置好连接数据库的方式，建议不改我的设置
-```
+```python
 DATABASES = {
     # 在这里设置你的mysql
     'default': {
@@ -59,7 +59,7 @@ DATABASES = {
 
 ### 3. 运行django项目
 进入项目目录下（manage.py所在目录）,执行下列代码
-```
+```python
 python manage.py runserver
 ```
 进入执行命令后显示的网站即可。
