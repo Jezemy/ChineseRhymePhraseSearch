@@ -66,7 +66,7 @@ python manage.py runserver
 进入执行命令后显示的网站即可。
 
 # 额外说明
-本项目短时间内不会再继续更新，后续如若更新的话，有可能会增加新的东西
+本项目短时间内不会再继续更新，等我忙完一阵子后会更新，有问题或需求可以发issue
 
 # 附图
 ![数据库表图](https://github.com/Jezemy/ChineseRhymePhraseSearch/blob/master/pic/tables.png?raw=true)
